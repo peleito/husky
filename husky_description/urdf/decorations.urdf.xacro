@@ -168,8 +168,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
         <visual>
           <geometry>
             <mesh filename="package://husky_description/meshes/user_rail.dae" />
+            <!-- <box size="0.475 0.423 0.268"/> -->
           </geometry>
         </visual>
+        <collision>
+          <origin xyz="-0.3  0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.475 0.423 0.268"/>
+          </geometry>
+        </collision>
       </link>
 
       <!-- Attach user rails to base link -->
