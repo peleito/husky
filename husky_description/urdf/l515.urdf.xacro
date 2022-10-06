@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="front_l515" />
+
+  <!--
+    The gazebo plugin aligns the depth data with the Z axis, with X=left and Y=up
+    ROS expects the depth data along the X axis, with Y=left and Z=up
+    This link only exists to give the gazebo plugin the correctly-oriented frame
+  -->
+  <link name="front_l515_gazebo" />
+  <joint name="front_l515_gazebo_joint" type="fixed">
+    <parent link="front_l515"/>
+    <child link="front_l515_gazebo"/>
+    <origin xyz="0.0 0 0" rpy="-1.5707963267948966 0 -1.5707963267948966"/>
+  </joint>
+
+  <gazebo reference="front_l515">
+    <!-- <turnGravityOff>true</turnGravityOff> -->
+    <sensor type="depth" name="front_l515_depth">
+      <update_rate>30</update_rate>
+      <camera>
+        <!-- 75x65 degree FOV for the depth sensor -->
+        <horizontal_fov>1.5184351666666667</horizontal_fov>
+        <vertical_fov>1.0122901111111111</vertical_fov>
+
+        <image>
+          <width>1024</width>
+          <height>768</height>
+          <format>RGB8</format>
+        </image>
+        <clip>
+          <!-- give the color sensor a maximum range of 50m so that the simulation renders nicely -->
+          <near>0.25</near>
+          <far>50.0</far>
+        </clip>
+        <!-- <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.014</stddev>
+        </noise> -->
+      </camera>
+      <plugin name="l515_controller" filename="libgazebo_ros_openni_kinect.so">
+        <baseline>0.2</baseline>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>30</updateRate>
+        <cameraName>l515</cameraName>
+        <imageTopicName>color/image_raw</imageTopicName>
+        <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+        <depthImageTopicName>depth/image_rect_raw</depthImageTopicName>
+        <depthImageInfoTopicName>depth/camera_info</depthImageInfoTopicName>
+        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+        <frameName>front_l515_gazebo</frameName>
+        <pointCloudCutoff>0.105</pointCloudCutoff>
+        <pointCloudCutoffMax>8.0</pointCloudCutoffMax>
+
+        <depthSTD>0.014</depthSTD>
+
+        <distortionK1>0.00000001</distortionK1>
+        <distortionK2>0.00000001</distortionK2>
+        <distortionK3>0.00000001</distortionK3>
+        <distortionT1>0.00000001</distortionT1>
+        <distortionT2>0.00000001</distortionT2>
+        <CxPrime>0</CxPrime>
+        <Cx>0</Cx>
+        <Cy>0</Cy>
+        <focalLength>0</focalLength>
+        <hackBaseline>0</hackBaseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <link name="front_l515_lens">
+    <visual>
+      <origin xyz="0.02 0 0" rpy="${pi/2} 0 ${pi/2}" />
+      <geometry>
+        <mesh filename="package://husky_description/meshes/l515.dae" />
+      </geometry>
+      <!-- <material name="MetallicBlue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+      </material> -->
+    </visual>
+  </link>
+
+  <joint type="fixed" name="front_l515_lens_joint">
+    <!-- Offset the camera 2cm backwards and 1cm up -->
+    <origin xyz="0.0903  0 0.068" rpy="0 0 0" />
+    <parent link="ur_arm_flange" />
+    <child link="front_l515_lens" />
+  </joint>
+  <joint type="fixed" name="front_l515_joint">
+    <origin xyz="0.025 0 0" rpy="0 0 0" />
+    <parent link="front_l515_lens" />
+    <child link="front_l515" />
+  </joint>
+</robot>
