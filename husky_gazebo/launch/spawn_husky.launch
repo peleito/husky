@@ -73,17 +73,28 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </group>
 
     <!-- Spawn robot in gazebo -->
+    <!-- <node pkg="rosservice" type="rosservice" name="rosservice" args="call /gazebo/pause_physics"/> -->
+
     <node name="spawn_husky_model" pkg="gazebo_ros" type="spawn_model"
         args="-x $(arg x)
               -y $(arg y)
               -z $(arg z)
               -Y $(arg yaw)
-              -unpause
               -urdf
               -param robot_description
               -model husky
-              -robot_namespace $(arg robot_namespace)" />
+              -robot_namespace $(arg robot_namespace)
+              -J ur_arm_elbow_joint 1.570796
+              -J ur_arm_shoulder_lift_joint -2.356194
+              -J ur_arm_shoulder_pan_joint 0.0
+              -J ur_arm_wrist_1_joint -2.356194
+              -J ur_arm_wrist_2_joint -1.570796
+              -J ur_arm_wrist_3_joint 0.0"/>
 
   </group>
+
+  
+  <!-- <node pkg="rosservice" type="rosservice" name="rosservice" args="call /gazebo/set_model_state" launch-prefix="bash -c 'sleep 5; $0 $@' " /> -->
+  <node pkg="rosservice" type="rosservice" name="rosservice" args="call /gazebo/unpause_physics" launch-prefix="bash -c 'sleep 10; $0 $@' " />
 
 </launch>

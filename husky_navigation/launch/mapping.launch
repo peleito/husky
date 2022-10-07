@@ -21,8 +21,8 @@
 
     <group unless="$(arg localization)">
 
-        <include file="$(find husky_navigation)/launch/gmapping.launch"/> <!-- change to rtabmap for 3d lidar -->
-        <!-- run file to control the movement of the arm for coarse mapping which moves in predefined path -->
+        <include file="$(find husky_navigation)/launch/gmapping.launch"/> <!-- change to rtabmap for 3d lidar minor issue -->
+        <!-- run file to control the movement of the arm for coarse mapping which moves in predefined path minor issue -->
 
     </group>
 </launch>
