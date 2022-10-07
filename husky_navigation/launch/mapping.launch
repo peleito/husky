@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="localization"    default="true"/>
+    <arg name="map_file" default="$(find husky_navigation)/maps/mymap.yaml"/>
+
+    <group if="$(arg localization)">
+
+        <node pkg="map_server"  name="map_server"   type="map_server"   args="$(arg map_file)"/>
+
+        <include file="$(find husky_navigation)/launch/amcl.launch"/>
+
+        <include file="$(find husky_navigation)/launch/move_base.launch"/>
+        <!-- move_base navigation for mobile motion (chase next point in array) -->
+        <!-- moveit or relaxedIK arm control to follow path from step 1 (chase next point in array) -->
+        <!-- forward kinematics of arm to find depth camera pose -->
+        <!-- rosbag record depth camera, localized pose of base, localized pose of sensor -->
+
+    </group>
+
+    <group unless="$(arg localization)">
+
+        <include file="$(find husky_navigation)/launch/gmapping.launch"/> <!-- change to rtabmap for 3d lidar -->
+        <!-- run file to control the movement of the arm for coarse mapping which moves in predefined path -->
+
+    </group>
+</launch>
