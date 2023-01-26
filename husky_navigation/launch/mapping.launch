@@ -3,7 +3,9 @@
 <launch>
 
     <arg name="localization"    default="true"/>
-    <arg name="map_file" default="$(find husky_navigation)/maps/mymap.yaml"/>
+    <arg name="map_file" default="$(find husky_navigation)/maps/map_grid1.yaml"/>
+    
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find husky_navigation)/rviz/navigation.rviz" />
 
     <group if="$(arg localization)">
 
@@ -12,8 +14,11 @@
         <include file="$(find husky_navigation)/launch/amcl.launch"/>
 
         <include file="$(find husky_navigation)/launch/move_base.launch"/>
+
         <!-- move_base navigation for mobile motion (chase next point in array) -->
         <!-- moveit or relaxedIK arm control to follow path from step 1 (chase next point in array) -->
+        <!-- <node pkg="controlling" type="dual_control.py"    name="dual_control"   launch-prefix="bash -c 'sleep 15; $0 $@' "/> -->
+
         <!-- forward kinematics of arm to find depth camera pose -->
         <!-- rosbag record depth camera, localized pose of base, localized pose of sensor -->
 
