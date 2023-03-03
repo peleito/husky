@@ -334,10 +334,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:include filename="$(arg urdf_extras)" />
 
   <!-- <xacro:include filename="$(find husky_description)/urdf/realsense.urdf.xacro"/> -->
-  <xacro:include filename="$(find husky_description)/urdf/lidar.urdf.xacro"/>
-  <xacro:include filename="$(find husky_description)/urdf/l515.urdf.xacro"/>
-  <xacro:include filename="$(find gazebo_plugins)/test/multi_robot_scenario/xacro/laser/hokuyo.xacro"/>
-  <xacro:laser name="front_laser" parent="top_plate_front_link" xyz="0.025 0 0.035" rpy="0 0 0" meshes="package://gazebo_plugins/test/multi_robot_scenario/meshes/laser"/>
+  <!-- <xacro:include filename="$(find husky_description)/urdf/lidar.urdf.xacro"/> -->
+  <!-- <xacro:include filename="$(find husky_description)/urdf/l515.urdf.xacro"/> -->
+  <!-- <xacro:include filename="$(find gazebo_plugins)/test/multi_robot_scenario/xacro/laser/hokuyo.xacro"/> -->
+  <!-- <xacro:laser name="front_laser" parent="top_plate_front_link" xyz="0.025 0 0.035" rpy="0 0 0" meshes="package://gazebo_plugins/test/multi_robot_scenario/meshes/laser"/> -->
 
   <!-- Optional for Clearpath internal softwares -->
   <xacro:include filename="$(arg cpr_urdf_extras)" />
@@ -382,5 +382,55 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       <drift>0.0001 0.0001 0.0001</drift>
     </plugin>
   </gazebo>
+
+  <gazebo>
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_footprint</bodyName>
+      <topicName>ground_truth/husky_footprint</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>world</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="p3d_tool_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>ur_arm_tool0</bodyName>
+      <topicName>ground_truth/ur_arm_tool0</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>world</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+  
+  <!-- <gazebo>
+    <controller:ros_p3d name="my_box_controller" plugin="libros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100.0</updateRate>
+      <bodyName>base_footprint</bodyName>
+      <topicName>husky_footprint_groundtruth</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>base_footprint</frameName>
+      <interface:position name="my_box_p3d_position_iface" />
+    </controller:ros_p3d>
+  </gazebo>
+
+  <gazebo>
+    <controller:ros_p3d name="my_box_controller_tool" plugin="libros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100.0</updateRate>
+      <bodyName>ur_arm_tool0</bodyName>
+      <topicName>ur_tool_groundtruth</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>ur_arm_tool0</frameName>
+      <interface:position name="my_box_p3d_position_iface" />
+    </controller:ros_p3d>
+  </gazebo> -->
 
 </robot>
